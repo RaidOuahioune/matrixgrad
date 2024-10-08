@@ -1,7 +1,7 @@
 # Welcome to MatrixGrad !
 
 This is an extension to the MicroGrad library that is mad by **karpathy**. For more details check the [official repo](https://github.com/karpathy/micrograd).
-The goal was to implepment a more generalized autograd that works with vectors and matrices.
+The goal was to implement a more generalized autograd that works with vectors and matrices.
 
 All the features of micro-grad are supported like tracing and visualization of the compuation graph.
 
