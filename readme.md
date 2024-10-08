@@ -59,9 +59,9 @@ model(x)
 It gives something like this
 ![alt text](image-1.png)
 
-## the do the optimazation of the model weights:
+## The optimization of the model weights:
 
-#### 1. Define a loss function with this paradim
+#### 1. Define a loss function with this paradigme
 
 ```python
 def loss():
