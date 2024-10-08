@@ -1,5 +1,5 @@
 import numpy as np
-from engine import Tensor
+from matrixgrad.engine import Tensor
 
 
 class Module:
@@ -17,7 +17,7 @@ class Layer(Module):
     def __init__(self, input_dim, output_dim, nonlin=True):
         self.input_dim = input_dim
         self.output_dim = output_dim
-        self.w = Tensor(np.random.randn(input_dim, output_dim) * np.sqrt(2 / input_dim))
+        self.w = Tensor(np.random.uniform(-1, 1, (input_dim, output_dim)))
 
         self.nonlin = nonlin
 

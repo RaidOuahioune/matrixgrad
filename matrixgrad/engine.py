@@ -11,6 +11,10 @@ class Tensor:
 
     def __init__(self, data, _children=(), _op=""):
 
+        if isinstance(data, Tensor):
+            print("Warning: Tensor object passed to Tensor constructor")
+            data = data.data
+
         if not isinstance(data, np.ndarray):
             if isinstance(data, (float, int)):
                 data = np.array([[data]], dtype=np.float64)
@@ -45,29 +49,33 @@ class Tensor:
 
     def __mul__(self, other):
 
-        if isinstance(other, Tensor):
+        if isinstance(other, Tensor) and other.data.shape == self.data.shape:
             out = Tensor(self.data * other.data, (self, other), f"*")
 
             def _backward():
                 self.grad += other.data * out.grad
+
                 other.grad += self.data * out.grad
 
         else:
+            if isinstance(other, Tensor):
+                other = other.data.flatten()
             out = Tensor(self.data * other, (self,), f"*{other}")
 
             def _backward():
-                self.grad += other * out.grad
+                self.grad += (other * out.grad).astype(np.float64)
 
         out._backward = _backward
         return out
 
     def sum(self):
         # Create a tensor with the sum of all elements in self.data
+
         out = Tensor(self.data.sum(), (self,), "sum")
 
         # Backward function to propagate the gradient
         def _backward():
-            self.grad += np.ones_like(self.data) * out.grad
+            self.grad += np.ones_like(self.data, dtype=np.float64) * out.grad
 
         out._backward = _backward
         return out
@@ -107,6 +115,15 @@ class Tensor:
 
         out._backward = _backward
 
+        return out
+
+    def sigmoid(self):
+        out = Tensor(1 / (1 + np.exp(-self.data)), (self,), "sigmoid")
+
+        def _backward():
+            self.grad += out.grad * out.data * (1 - out.data)
+
+        out._backward = _backward
         return out
 
     def backward(self):
